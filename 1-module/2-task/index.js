@@ -9,7 +9,9 @@ function print(text) {
  * Эту функцию нужно поменять так,
  * чтобы функция sayHello работала корректно
  */
+// eslint-disable-next-line no-debugger
 function isValid(name) {
+  return name !== undefined && name.length >= 4 && (name.search(' ') === -1);
 }
 
 function sayHello() {
