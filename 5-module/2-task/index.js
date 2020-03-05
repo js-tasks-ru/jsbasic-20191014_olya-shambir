@@ -14,16 +14,46 @@
  * @constructor
  */
 function SortableTable(items) {
-  /**
-   * @property {Element} - обязательное свойство, которое ссылается на элемент <table>
-   */
   this.el = document.createElement('table');
 
-  /**
-   * Метод выполняет сортировку таблицы
-   * @param {number} column - номер колонки, по которой
-   * нужно выполнить сортировку (отсчет начинается от 0)
-   * @param {boolean} desc - признак того, что сортировка должна идти в обратном порядке
-   */
-  this.sort = (column, desc = false) => {};
+  this.renderHead = (table, content) => {
+    let tHead = table.createTHead();
+    let headRow = tHead.insertRow(0);
+    Object.keys(...content)
+      .forEach((el, i) => {
+        let cell = headRow.insertCell(i);
+        cell.innerHTML = el.toUpperCase();
+      });
+    return tHead;
+  };
+
+  this.renderBody = (table, content) => {
+    let tBody = table.appendChild(document.createElement('tbody'));
+    content
+      .forEach((el, i) => {
+        let row = tBody.insertRow(i);
+        Object.values(el)
+          .forEach((el, i) => {
+            let cell = row.insertCell(i);
+            cell.innerHTML = el;
+          });
+      });
+    return tBody;
+  };
+
+  this.tHead = this.renderHead(this.el, items);
+  this.tBody = this.renderBody(this.el, items);
+
+  this.sort = (column, desc = false) => {
+    let sorted = Array.from(this.el.rows)
+      .slice(1)
+      .sort((a, b) => {
+        if (!desc) {
+          return a.cells[column].innerHTML > b.cells[column].innerHTML ? 1 : -1;
+        } else {
+          return a.cells[column].innerHTML < b.cells[column].innerHTML ? 1 : -1;
+        }
+      });
+    this.el.tBodies[0].append(...sorted);
+  };
 }
