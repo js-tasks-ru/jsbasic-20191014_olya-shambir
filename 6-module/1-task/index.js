@@ -20,7 +20,6 @@ class ClearedTable {
     this.addRmBtn(data);
     this.renderHead(this.el, data);
     this.renderBody(this.el, data);
-    this.el.classList.add('pure-table');
     this.el.addEventListener(
       'click',
       (event) => {
