@@ -48,12 +48,9 @@ class ProductList {
             </div>`;
   }
 
-  renderStars(item) {
-    let currentCard = this.el.querySelector(`*[data-product-id = '${item.id}']`);
-
+  renderStars(item, currentCard) {
     if (item.rating) {
       const stars = currentCard.querySelectorAll('.icon-star');
-
       stars.forEach((star, index) => {
         if (index < item.rating.stars - 1) {
           star.classList.add('checked');
@@ -69,8 +66,8 @@ class ProductList {
     if (event.target.dataset.buttonRole === 'add-to-cart'
       && confirm('Вы уверенны, что хотите добавить этот товар в корзину?')) {
 
-      const id = event.target.closest('.products-list-product').dataset.productId;
-      const item = this.data.find(i => i.id === +id);
+      const id = Number(event.target.closest('.products-list-product').dataset.productId);
+      const item = this.data.find(i => i.id === id);
       if (!this.cart.find(i => i.id === +id)) {
         this.cart.push(item);
 
@@ -89,7 +86,8 @@ class ProductList {
 
         data.forEach(item => {
           this.productsContainer.innerHTML += this.renderProduct(item);
-          this.renderStars(item);
+          const currentCard = this.el.querySelector(`*[data-product-id = '${item.id}']`);
+          this.renderStars(item, currentCard);
         });
 
         this.productsContainer.addEventListener('click', this.OnAddtoCart.bind(this));
@@ -100,3 +98,4 @@ class ProductList {
 
 // Делает класс доступным глобально, сделано для упрощения, чтобы можно было его вызывать из другого скрипта
 window.ProductList = ProductList;
+
